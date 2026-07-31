@@ -13,6 +13,9 @@
         .header-institucional { background-color: var(--stps-darkred); color: white; }
         .seccion-titulo { color: var(--stps-green); border-bottom: 2px solid var(--stps-grey); padding-bottom: 5px; margin-top: 20px;}
         .btn-enviar { background-color: var(--stps-red); color: white; border: none; }
+        .btn-flotante { position: fixed; right: 20px; z-index: 1000; background-color: var(--stps-green); color: white; border: none; border-radius: 50%; width: 45px; height: 45px; font-weight: bold; box-shadow: 0px 4px 6px rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; cursor: pointer;}
+            .btn-flotante-arriba { bottom: 80px; }
+            .btn-flotante-abajo { bottom: 20px; }
     </style>
 </head>
 <body>
@@ -148,10 +151,6 @@
                 <datalist id="listaMunicipios"></datalist>
             </div>
             <div class="col-md-3">
-                <label class="form-label">C.P.</label> <!--[cite: 1] -->
-                <input type="text" class="form-control" name="Municipio" placeholder="Escribe el municipio" required>
-            </div>
-            <div class="col-md-3">
                 <label class="form-label">C.P.</label>
                 <input type="text" class="form-control" name="CP" pattern="\d{5}" title="Debe contener 5 dígitos" required>
             </div>
@@ -201,33 +200,33 @@
         <h4 class="seccion-titulo">6. FOTOS REPRESENTANTE Y CT</h4>
         <div class="row g-3">
             <div class="col-md-4">
-                <label class="form-label">INE Frente (Rep)</label> <!--[cite: 1] -->
-                <input class="form-control" type="file" id="foto-ine-f" name="Foto_INE_Frente_Representante" accept="image/*" capture="environment" required>
+                <label class="form-label">INE Frente (Rep)</label>
+                <input class="form-control" type="file" id="foto-ine-f" name="Foto_INE_Frente_Representante" accept="image/*" required>
                 <div id="badge-foto-ine-f"></div>
             </div>
             <div class="col-md-4">
-                <label class="form-label">INE Reverso (Rep)</label> <!--[cite: 1] -->
-                <input class="form-control" type="file" id="foto-ine-r" name="Foto_INE_Reverso_Representante" accept="image/*" capture="environment" required>
+                <label class="form-label">INE Reverso (Rep)</label>
+                <input class="form-control" type="file" id="foto-ine-r" name="Foto_INE_Reverso_Representante" accept="image/*" required>
                 <div id="badge-foto-ine-r"></div>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Foto Solicitante</label> <!--[cite: 1] -->
-                <input class="form-control" type="file" id="foto-solic" name="Foto_Solicitante_Representante" accept="image/*" capture="user" required>
+                <label class="form-label">Foto Solicitante</label>
+                <input class="form-control" type="file" id="foto-solic" name="Foto_Solicitante_Representante" accept="image/*" required>
                 <div id="badge-foto-solic"></div>
             </div>
              <div class="col-md-4">
-                <label class="form-label">Comprobante Domicilio</label> <!--[cite: 1] -->
-                <input class="form-control" type="file" id="foto-dom" name="Foto_Domicilio" accept="image/*" capture="environment" required>
+                <label class="form-label">Comprobante Domicilio</label>
+                <input class="form-control" type="file" id="foto-dom" name="Foto_Domicilio" accept="image/*" required>
                 <div id="badge-foto-dom"></div>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Exterior del CT (Opcional)</label>
-                <input class="form-control" type="file" id="foto-ext" name="Foto_Exterior" accept="image/*" capture="environment">
+                <input class="form-control" type="file" id="foto-ext" name="Foto_Exterior" accept="image/*">
                 <div id="badge-foto-ext"></div>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Interior del CT (Opc)</label> <!--[cite: 1] -->
-                <input class="form-control" type="file" id="foto-int" name="Foto_Interior" accept="image/*" capture="environment">
+                <label class="form-label">Interior del CT (Opc)</label>
+                <input class="form-control" type="file" id="foto-int" name="Foto_Interior" accept="image/*">
                 <div id="badge-foto-int"></div>
             </div>
         </div>
@@ -236,35 +235,35 @@
         <h4 class="seccion-titulo">DATOS DEL TUTOR (Opcional)</h4>
         <div class="row g-3">
             <div class="col-md-3">
-                <label class="form-label">Paterno Tutor</label> <!--[cite: 1] -->
+                <label class="form-label">Paterno Tutor</label>
                 <input type="text" class="form-control" name="ApellidoPaterno_Tutor">
             </div>
             <div class="col-md-3">
-                <label class="form-label">Materno Tutor</label> <!--[cite: 1] -->
+                <label class="form-label">Materno Tutor</label>
                 <input type="text" class="form-control" name="ApellidoMaterno_Tutor">
             </div>
             <div class="col-md-3">
-                <label class="form-label">Nombres Tutor</label> <!--[cite: 1] -->
+                <label class="form-label">Nombres Tutor</label>
                 <input type="text" class="form-control" name="Nombre_Tutor">
             </div>
             <div class="col-md-3">
-                <label class="form-label">CURP Tutor</label> <!--[cite: 1] -->
-                <input type="text" class="form-control" name="CURP_Tutor">
+                <label class="form-label">CURP Tutor</label>
+                <input type="text" class="form-control" name="CURP_Tutor" pattern="^[A-Z][AEIOUX][A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HM](AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]\d$" title="Debe ser una CURP válida (18 caracteres)">
             </div>
             <!-- Fotos Tutor -->
             <div class="col-md-4">
                 <label class="form-label">INE Frente Tutor</label>
-                <input class="form-control" type="file" id="foto-tutor-inef" name="Foto_INE_Frente_Tutor" accept="image/*" capture="environment">
+                <input class="form-control" type="file" id="foto-tutor-inef" name="Foto_INE_Frente_Tutor" accept="image/*">
                 <div id="badge-foto-tutor-inef"></div>
             </div>
             <div class="col-md-4">
                 <label class="form-label">INE Reverso Tutor</label>
-                <input class="form-control" type="file" id="foto-tutor-iner" name="Foto_INE_Reverso_Tutor" accept="image/*" capture="environment">
+                <input class="form-control" type="file" id="foto-tutor-iner" name="Foto_INE_Reverso_Tutor" accept="image/*">
                 <div id="badge-foto-tutor-iner"></div>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Foto Tutor</label>
-                <input class="form-control" type="file" id="foto-tutor-solic" name="Foto_Solicitante_Tutor" accept="image/*" capture="user">
+                <input class="form-control" type="file" id="foto-tutor-solic" name="Foto_Solicitante_Tutor" accept="image/*">
                 <div id="badge-foto-tutor-solic"></div>
             </div>
         </div>
