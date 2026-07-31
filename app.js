@@ -84,7 +84,7 @@ async function submitForm(formElement, formType) {
   });
 
   try {
-    const response = await fetch('TU_URL_DE_APPS_SCRIPT', {
+    const response = await fetch('https://docs.google.com/spreadsheets/d/1uAE_q7Y9g292sQWZWF8L0j90B8gaReou-67IjrxD76w/edit?gid=0#gid=0', {
       method: 'POST',
       body: JSON.stringify(payload)
     });
