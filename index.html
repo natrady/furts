@@ -594,12 +594,10 @@
     });
 
     inputEstado.addEventListener('input', function() {
-        const estadoSeleccionado = this.value;
-        // Buscamos la llave original ignorando mayúsculas/minúsculas
-        const estadoReal = Object.keys(catalogoLugares).find(k => k.toUpperCase() === estadoSeleccionado.toUpperCase());
+        const estadoSeleccionado = this.value.toUpperCase();
+        const estadoReal = Object.keys(catalogoLugares).find(k => k.toUpperCase() === estadoSeleccionado);
         
         listaMunicipios.innerHTML = '';
-        inputMunicipio.value = '';
         
         if (estadoReal && catalogoLugares[estadoReal]) {
             const municipios = catalogoLugares[estadoReal].sort();
@@ -608,6 +606,28 @@
                 opcion.value = municipio.toUpperCase();
                 listaMunicipios.appendChild(opcion);
             });
+        }
+    });
+
+    inputEstado.addEventListener('change', function() {
+        if (this.value) this.value = this.value.toUpperCase();
+        const val = this.value;
+        const exists = Array.from(listaEstados.options).some(opt => opt.value === val);
+        if (!exists && val !== '') { 
+            this.value = ''; 
+            inputMunicipio.value = ''; 
+            listaMunicipios.innerHTML = ''; 
+            alert('❌ Debes seleccionar un Estado válido de la lista.');
+        }
+    });
+
+    inputMunicipio.addEventListener('change', function() {
+        if (this.value) this.value = this.value.toUpperCase();
+        const val = this.value;
+        const exists = Array.from(listaMunicipios.options).some(opt => opt.value === val);
+        if (!exists && val !== '') { 
+            this.value = ''; 
+            alert('❌ Debes seleccionar un Municipio válido de la lista.');
         }
     });
 </script>
