@@ -106,9 +106,9 @@ async function submitForm(formElement, formType) {
     alert("✅ ¡Registro guardado en Sheets y Drive con éxito!");
     formElement.reset();
     
-  if (loadingOverlay) { loadingOverlay.classList.add('d-none'); }
+  sessionStorage.removeItem('borrador_' + formElement.id); // Borramos el borrador
+    if (loadingOverlay) { loadingOverlay.classList.add('d-none'); }
     if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerHTML = '💾 Guardar Registro'; }
-
   } catch (error) {
     const tx = db.transaction(STORE_NAME, 'readwrite');
     tx.objectStore(STORE_NAME).add(payload);
@@ -116,6 +116,7 @@ async function submitForm(formElement, formType) {
       updatePendingCount();
       alert("Sin conexión. Registro guardado localmente 💾");
       formElement.reset();
+      sessionStorage.removeItem('borrador_' + formElement.id); // Borramos el borrador
       if (loadingOverlay) { loadingOverlay.classList.add('d-none'); }
       if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerHTML = '💾 Guardar Registro'; }
     };
