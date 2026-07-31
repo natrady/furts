@@ -133,15 +133,13 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">Estado (Local)</label>
-                <select class="form-select" name="Estado" id="selectEstado" required>
-                    <option value="">Seleccione un estado...</option>
-                </select>
+                <input class="form-control" name="Estado" id="inputEstado" list="listaEstados" placeholder="Escribe o selecciona..." required>
+                <datalist id="listaEstados"></datalist>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Municipio (Local)</label>
-                <select class="form-select" name="Municipio" id="selectMunicipio" required>
-                    <option value="">Seleccione primero un estado...</option>
-                </select>
+                <input class="form-control" name="Municipio" id="inputMunicipio" list="listaMunicipios" placeholder="Escribe o selecciona..." required>
+                <datalist id="listaMunicipios"></datalist>
             </div>
             <div class="col-md-3">
                 <label class="form-label">C.P.</label> <!--[cite: 1] -->
@@ -388,32 +386,34 @@
         "Zacatecas": ["Apozol", "Apulco", "Atolinga", "Benito Juárez", "Calera", "Cañitas de Felipe Pescador", "Chalchihuites", "Concepción del Oro", "Cuauhtémoc", "El Plateado de Joaquín Amaro", "El Salvador", "Fresnillo", "Genaro Codina", "General Enrique Estrada", "General Francisco R. Murguía", "General Pánfilo Natera", "Guadalupe", "Huanusco", "Jalpa", "Jerez", "Jiménez del Teul", "Juan Aldama", "Juchipila", "Loreto", "Luis Moya", "Mazapil", "Melchor Ocampo", "Mezquital del Oro", "Miguel Auza", "Momax", "Monte Escobedo", "Morelos", "Moyahua de Estrada", "Nochistlán de Mejía", "Noria de Ángeles", "Ojocaliente", "Pánuco", "Pinos", "Río Grande", "Sain Alto", "Santa María de la Paz", "Sombrerete", "Susticacán", "Tabasco", "Tepechitlán", "Tepetongo", "Teúl de González Ortega", "Tlaltenango de Sánchez Román", "Trancoso", "Trinidad García de la Cadena", "Valparaíso", "Vetagrande", "Villa de Cos", "Villa García", "Villa González Ortega", "Villa Hidalgo", "Villanueva", "Zacatecas"]
     };
 
-    const selectEstado = document.getElementById('selectEstado');
-    const selectMunicipio = document.getElementById('selectMunicipio');
+    const inputEstado = document.getElementById('inputEstado');
+    const inputMunicipio = document.getElementById('inputMunicipio');
+    const listaEstados = document.getElementById('listaEstados');
+    const listaMunicipios = document.getElementById('listaMunicipios');
 
     window.addEventListener('DOMContentLoaded', () => {
         const estados = Object.keys(catalogoLugares).sort();
         estados.forEach(estado => {
             const opcion = document.createElement('option');
             opcion.value = estado.toUpperCase();
-            opcion.textContent = estado;
-            selectEstado.appendChild(opcion);
+            listaEstados.appendChild(opcion);
         });
     });
 
-    selectEstado.addEventListener('change', function() {
-        // Al seleccionar un estado, borramos los municipios viejos
-        const estadoSeleccionado = this.options[this.selectedIndex].text;
-        selectMunicipio.innerHTML = '<option value="">Seleccione un municipio...</option>';
+    inputEstado.addEventListener('input', function() {
+        const estadoSeleccionado = this.value;
+        // Buscamos la llave original ignorando mayúsculas/minúsculas
+        const estadoReal = Object.keys(catalogoLugares).find(k => k.toUpperCase() === estadoSeleccionado.toUpperCase());
         
-        // Y cargamos los municipios del estado elegido
-        if (estadoSeleccionado && catalogoLugares[estadoSeleccionado]) {
-            const municipios = catalogoLugares[estadoSeleccionado].sort();
+        listaMunicipios.innerHTML = '';
+        inputMunicipio.value = '';
+        
+        if (estadoReal && catalogoLugares[estadoReal]) {
+            const municipios = catalogoLugares[estadoReal].sort();
             municipios.forEach(municipio => {
                 const opcion = document.createElement('option');
                 opcion.value = municipio.toUpperCase();
-                opcion.textContent = municipio;
-                selectMunicipio.appendChild(opcion);
+                listaMunicipios.appendChild(opcion);
             });
         }
     });
