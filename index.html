@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Territorial - Centro de Trabajo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --stps-dark: #161a1d;
+            --stps-grey: #98989A;
+            --stps-red: #9b2247;
+            --stps-darkred: #611232;
+            --stps-green: #1e5b4f;
+        }
+        body { background-color: #f8f9fa; color: var(--stps-dark); }
+        .header-institucional { background-color: var(--stps-darkred); color: white; }
+        .seccion-titulo { color: var(--stps-green); border-bottom: 2px solid var(--stps-grey); padding-bottom: 5px; margin-top: 20px;}
+        .btn-enviar { background-color: var(--stps-red); color: white; border: none; }
+        .btn-enviar:hover { background-color: var(--stps-darkred); color: white; }
+        .form-control:focus, .form-select:focus { border-color: var(--stps-green); box-shadow: 0 0 0 0.25rem rgba(30, 91, 79, 0.25); }
+        #sync-counter { font-weight: bold; color: var(--stps-red); }
+    </style>
+</head>
+<body>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 header-institucional p-3 rounded">
+        <h2 class="m-0">FORMATO ÚNICO DE REGISTRO TERRITORIAL (CENTRO DE TRABAJO)</h2>
+        <span id="sync-counter">Pendientes: 0</span>
+    </div>
+
+    <form id="formCT" onsubmit="event.preventDefault(); submitForm(this, 'CT');">
+        
+        <!-- 1. Datos del Centro de Trabajo -->
+        <h4 class="seccion-titulo">1. DATOS DEL CENTRO DE TRABAJO</h4>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Organización</label>
+                <select class="form-select" name="Organizacion" required> <!--[cite: 1] -->
+                    <option value="">Seleccione...</option>
+                    <option value="FISICA">Persona Física</option> <!--[cite: 1] -->
+                    <option value="MORAL">Persona Moral</option> <!--[cite: 1] -->
+                    <option value="PUBLICA">Institución Pública</option> <!--[cite: 1] -->
+                    <option value="CIVIL">Sociedad Civil</option> <!--[cite: 1] -->
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Razón Social (Opcional)</label>
+                <input type="text" class="form-control" name="RazonSocial"> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Nombre Comercial</label>
+                <input type="text" class="form-control" name="NombreComercial" required> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">RFC</label>
+                <input type="text" class="form-control" name="RFC" required> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">CURP del Representante o Tutor</label>
+                <input type="text" class="form-control" name="CURP_Rep" required> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">INE/OCR o Pasaporte</label>
+                <input type="text" class="form-control" name="Identificacion_Rep" required> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Apellido Paterno</label>
+                <input type="text" class="form-control" name="ApPaterno" required> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Apellido Materno</label>
+                <input type="text" class="form-control" name="ApMaterno" required> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Nombre(s)</label>
+                <input type="text" class="form-control" name="Nombres" required> <!--[cite: 1] -->
+            </div>
+        </div>
+
+        <!-- 2. Contacto -->
+        <h4 class="seccion-titulo">2. CONTACTO</h4>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Teléfono CT (Opcional)</label>
+                <input type="text" class="form-control" name="TelCT"> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Teléfono Móvil</label>
+                <input type="text" class="form-control" name="TelMovil" required> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Correo Electrónico</label>
+                <input type="text" class="form-control" name="Correo" required> <!--[cite: 1] -->
+            </div>
+        </div>
+
+        <!-- 3 & 4. Trabajadores y Domicilio -->
+        <h4 class="seccion-titulo">3. NÚMERO DE TRABAJADORES Y 4. DOMICILIO</h4>
+        <div class="row g-3">
+             <div class="col-md-12">
+                <label class="form-label">Número de Trabajadores</label>
+                <select class="form-select" name="NumTrabajadores" required> <!--[cite: 1] -->
+                    <option value="">Seleccione rango...</option>
+                    <option value="0-5">0-5</option> <!--[cite: 1] -->
+                    <option value="6-10">6-10</option> <!--[cite: 1] -->
+                    <option value="11-30">11-30</option> <!--[cite: 1] -->
+                    <option value="31-50">31-50</option> <!--[cite: 1] -->
+                    <option value="51-100">51-100</option> <!--[cite: 1] -->
+                    <option value="101-250">101-250</option> <!--[cite: 1] -->
+                    <option value="250+">250 o más</option> <!--[cite: 1] -->
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Estado</label>
+                <input type="text" class="form-control" name="Estado" required> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Municipio</label>
+                <input type="text" class="form-control" name="Municipio" required> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">C.P.</label>
+                <input type="text" class="form-control" name="CP" required> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Calle y Colonia</label>
+                <input type="text" class="form-control" name="CalleColonia" required> <!--[cite: 1] -->
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Números (Ext / Int)</label>
+                <input type="text" class="form-control" name="Numeros" required> <!--[cite: 1] -->
+            </div>
+        </div>
+
+        <!-- 6. Documentación (Fotos) -->
+        <h4 class="seccion-titulo">DOCUMENTACIÓN (FOTOS)</h4>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Identificación Oficial (Frente y Reverso)</label> <!--[cite: 1] -->
+                <input class="form-control" type="file" id="foto-ine" name="Foto_INE" accept="image/*" capture="environment">
+                <div id="badge-foto-ine"></div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Fotografía del Solicitante</label> <!--[cite: 1] -->
+                <input class="form-control" type="file" id="foto-solicitante" name="Foto_Solicitante" accept="image/*" capture="user">
+                <div id="badge-foto-solicitante"></div>
+            </div>
+             <div class="col-md-6">
+                <label class="form-label">Comprobante de Domicilio (Opcional)</label> <!--[cite: 1] -->
+                <input class="form-control" type="file" id="foto-domicilio" name="Foto_Domicilio" accept="image/*" capture="environment">
+                <div id="badge-foto-domicilio"></div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Exterior del CT (Opcional)</label> <!--[cite: 1] -->
+                <input class="form-control" type="file" id="foto-exterior" name="Foto_Exterior" accept="image/*" capture="environment">
+                <div id="badge-foto-exterior"></div>
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="mt-4 text-end">
+            <button type="submit" class="btn btn-enviar px-5 py-2">Guardar Registro</button>
+        </div>
+    </form>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
