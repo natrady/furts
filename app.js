@@ -180,3 +180,50 @@ async function syncPending() {
     else alert("⚠️ Hubo un problema de conexión. Intenta de nuevo más tarde.");
   };
 }
+
+// 7. Auto-guardado de borradores al navegar
+document.addEventListener('DOMContentLoaded', () => {
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        const formId = form.id;
+        if (!formId) return;
+
+        // Restaurar datos al cargar la página
+        const draft = sessionStorage.getItem('borrador_' + formId);
+        if (draft) {
+            const data = JSON.parse(draft);
+            for (let key in data) {
+                const field = form.elements[key];
+                if (field && field.type !== 'file') {
+                    if (field.type === 'checkbox' || field.type === 'radio') {
+                        if (field.length) { // Múltiples casillas con el mismo nombre
+                            field.forEach(f => { if (data[key].includes(f.value)) f.checked = true; });
+                        } else {
+                            field.checked = data[key];
+                        }
+                    } else {
+                        field.value = data[key];
+                        // Disparar evento para que se abran los campos condicionales
+                        if (field.tagName === 'SELECT') field.dispatchEvent(new Event('change'));
+                    }
+                }
+            }
+        }
+
+        // Guardar datos en silencio cada vez que escriben algo
+        form.addEventListener('input', e => {
+            if (e.target.type === 'file') return; // Las fotos no se pueden auto-guardar por seguridad del navegador
+            const formData = new FormData(form);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                if (data[key]) {
+                    if (!Array.isArray(data[key])) data[key] = [data[key]];
+                    data[key].push(value);
+                } else {
+                    data[key] = value;
+                }
+            }
+            sessionStorage.setItem('borrador_' + formId, JSON.stringify(data));
+        });
+    });
+});
