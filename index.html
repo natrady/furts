@@ -9,12 +9,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root { --stps-dark: #161a1d; --stps-grey: #98989A; --stps-gold: #b38e5d; --stps-darkgold: #8b6530; --stps-guinda: #611232; }
-        body { background-color: #f6f3ee; color: var(--stps-dark); padding-top: 140px; }
+        /* overscroll-behavior-y bloquea que la pantalla se refresque al jalar hacia abajo */
+        body { background-color: #f6f3ee; color: var(--stps-dark); padding-top: 190px; overscroll-behavior-y: none; }
         
         /* Barra de navegación superior fija */
         .sticky-top-bar { position: fixed; top: 0; left: 0; width: 100%; z-index: 1050; background-color: #f8f9fa; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .nav-tabs .nav-link { color: var(--stps-grey); font-weight: bold; }
-        .nav-tabs .nav-link.active { color: var(--stps-gold); border-bottom: 3px solid var(--stps-gold); background-color: transparent;}
+        .banner-legal { background-color: white; font-size: 0.65rem; text-align: center; padding: 4px; font-weight: bold; border-bottom: 1px solid #ddd; }
+        .nav-tabs .nav-link { color: var(--stps-grey); font-weight: bold; border: none; }
+        .nav-tabs .nav-link.active { color: var(--stps-guinda); border-bottom: 3px solid var(--stps-guinda); background-color: transparent;}
+        
+        /* Menú de pasos tipo Boxeando por la Paz */
+        .step-tabs { display: flex; justify-content: center; background-color: white; padding-top: 10px; border-bottom: 2px solid #eee; }
+        .step-tab { flex: 1; text-align: center; padding: 10px 5px; font-size: 0.85rem; font-weight: bold; color: var(--stps-grey); cursor: pointer; text-transform: uppercase; }
+        .step-tab.active { color: var(--stps-green); border-bottom: 4px solid var(--stps-green); }
         
         .header-institucional { background-color: var(--stps-gold); color: white; }
         .seccion-titulo { color: var(--stps-darkgold); border-bottom: 2px solid var(--stps-grey); padding-bottom: 5px; margin-top: 20px;}
@@ -35,16 +42,20 @@
 
 <!-- Barra Superior Fija -->
 <div class="sticky-top-bar">
+    <div class="banner-legal">"ESTE PROGRAMA ES PÚBLICO AJENO A CUALQUIER PARTIDO POLÍTICO. QUEDA PROHIBIDO EL USO PARA FINES DISTINTOS A LOS ESTABLECIDOS EN EL PROGRAMA"</div>
     <ul class="nav nav-tabs px-3 pt-2">
         <li class="nav-item"><a class="nav-link active" href="#">Registro CT</a></li>
-        <li class="nav-item"><a class="nav-link" href="joven.html" style="color: var(--stps-guinda);">Registro Joven</a></li>
+        <li class="nav-item"><a class="nav-link" href="joven.html">Registro Joven</a></li>
     </ul>
     <div class="d-flex justify-content-between align-items-center p-3 header-institucional">
         <h5 class="m-0 fw-bold">FURT - CENTRO DE TRABAJO</h5>
-        <div class="text-end">
-            <span class="badge bg-light text-dark mb-1">v1.2</span><br>
-            <button id="sync-counter" class="btn btn-light btn-sm fw-bold text-dark" onclick="syncPending()">Pendientes: 0</button>
-        </div>
+        <button id="sync-counter" class="btn btn-light btn-sm fw-bold text-dark" onclick="syncPending()">Pendientes: 0</button>
+    </div>
+    <!-- Menú de pasos navegables -->
+    <div class="step-tabs">
+        <div class="step-tab active" id="tab1" onclick="irAlPasoJS(1)">📝 1. Generales</div>
+        <div class="step-tab" id="tab2" onclick="irAlPasoJS(2)">📸 2. Actividad y Fotos</div>
+        <div class="step-tab" id="tab3" onclick="irAlPasoJS(3)">🧑‍🏫 3. Tutor y Plan</div>
     </div>
 </div>
 
@@ -150,7 +161,7 @@
         </div>
 
         <div class="mt-4 text-end">
-                <button type="button" class="btn btn-next px-5 py-2 fw-bold" onclick="irAlPaso(1, 2)">Siguiente ➜</button>
+                <button type="button" class="btn btn-next px-5 py-2 fw-bold" onclick="irAlPasoJS(2)">Siguiente ➜</button>
             </div>
         </div>
 
@@ -229,8 +240,8 @@
         </div>
 
         <div class="mt-4 d-flex justify-content-between">
-                <button type="button" class="btn btn-prev px-4 py-2 fw-bold" onclick="irAlPaso(2, 1)">⬅ Anterior</button>
-                <button type="button" class="btn btn-next px-4 py-2 fw-bold" onclick="irAlPaso(2, 3)">Siguiente ➜</button>
+                <button type="button" class="btn btn-prev px-4 py-2 fw-bold" onclick="irAlPasoJS(1)">⬅ Anterior</button>
+                <button type="button" class="btn btn-next px-4 py-2 fw-bold" onclick="irAlPasoJS(3)">Siguiente ➜</button>
             </div>
         </div>
 
@@ -350,31 +361,52 @@
             </div>
         </div>
 
-        <div class="mt-4 d-flex justify-content-between">
-                <button type="button" class="btn btn-prev px-4 py-2 fw-bold" onclick="irAlPaso(3, 2)">⬅ Anterior</button>
+        <div class="mt-4 d-flex justify-content-between align-items-center">
+                <button type="button" class="btn btn-prev px-4 py-2 fw-bold" onclick="irAlPasoJS(2)">⬅ Anterior</button>
                 <button type="submit" id="btnSubmit" class="btn btn-enviar px-5 py-2 fw-bold">💾 Guardar Registro</button>
             </div>
+        </div>
+        
+        <div class="mt-5 text-center text-muted" style="font-size: 0.75rem;">
+            <p>"Este formato no garantiza ni formaliza su participación en el Programa Jóvenes Construyendo el Futuro, en virtud de que se verificará previamente que cumple con los requisitos establecidos en las Reglas de Operación del Programa vigentes."</p>
+            <p class="fw-bold">Versión 1.3</p>
         </div>
     </form>
 </div>
 
 <script src="app.js"></script>
 <script>
-    function irAlPaso(pasoActual, pasoDestino) {
-        if (pasoDestino > pasoActual) {
-            const inputs = document.getElementById('step' + pasoActual).querySelectorAll('input, select, textarea');
-            let todoValido = true;
-            for (let input of inputs) {
-                if (!input.checkValidity()) {
-                    input.reportValidity();
-                    todoValido = false;
-                    break;
+    let pasoActualGlobal = 1;
+    function irAlPasoJS(pasoDestino) {
+        // Validar si intentan ir hacia adelante
+        if (pasoDestino > pasoActualGlobal) {
+            // Validamos todos los pasos intermedios para evitar que se salten requisitos
+            for (let i = pasoActualGlobal; i < pasoDestino; i++) {
+                const inputs = document.getElementById('step' + i).querySelectorAll('input, select, textarea');
+                for (let input of inputs) {
+                    if (!input.checkValidity()) {
+                        // Cambiamos a la pestaña donde está el error y mostramos globo nativo
+                        mostrarPaso(i);
+                        input.reportValidity();
+                        return; // Bloquea el avance
+                    }
                 }
             }
-            if (!todoValido) return;
         }
+        mostrarPaso(pasoDestino);
+    }
+
+    function mostrarPaso(paso) {
+        pasoActualGlobal = paso;
+        // Ocultar paneles y despintar tabs
         document.querySelectorAll('.step-pane').forEach(el => el.classList.remove('active'));
-        document.getElementById('step' + pasoDestino).classList.add('active');
+        document.querySelectorAll('.step-tab').forEach(el => el.classList.remove('active'));
+        
+        // Mostrar panel correcto y pintar tab
+        document.getElementById('step' + paso).classList.add('active');
+        document.getElementById('tab' + paso).classList.add('active');
+        
+        // Subir al inicio de la página para ver bien el contenido
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
