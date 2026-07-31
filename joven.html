@@ -109,9 +109,9 @@
                     <input type="text" class="form-control" name="CURP" id="curpJoven" pattern="^[A-Z][AEIOUX][A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HMX](AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]\d$" title="Debe ser una CURP válida (18 caracteres)" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Edad</label>
-                    <input type="number" class="form-control" name="Edad" id="edadJoven" min="18" max="29" required>
-                </div>
+                <label class="form-label">Edad</label>
+                <input type="number" class="form-control" name="Edad" id="edadJoven" min="18" max="29" readonly tabindex="-1" required>
+            </div>
                 <div class="col-md-4">
                     <label class="form-label">Número de INE / OCR / Pasaporte (Opcional)</label>
                     <input type="text" class="form-control" name="INE_OCR">
