@@ -70,6 +70,9 @@ document.querySelectorAll('input[type="file"]').forEach(input => {
 // 5. Envíos y Modo Offline
 async function submitForm(formElement, formType) {
   const formData = new FormData(formElement);
+  const btnSubmit = document.getElementById('btnSubmit');
+  if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.innerHTML = '⏳ Guardando, no cierres...'; }
+
   const payload = { formType: formType, fields: {}, images: {} };
 
   for (let [key, value] of formData.entries()) {
@@ -102,6 +105,8 @@ async function submitForm(formElement, formType) {
     alert("✅ ¡Registro guardado en Sheets y Drive con éxito!");
     formElement.reset();
     
+  if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerHTML = 'Guardar Registro'; }
+
   } catch (error) {
     const tx = db.transaction(STORE_NAME, 'readwrite');
     tx.objectStore(STORE_NAME).add(payload);
@@ -109,6 +114,7 @@ async function submitForm(formElement, formType) {
       updatePendingCount();
       alert("Sin conexión. Registro guardado localmente 💾");
       formElement.reset();
+      if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerHTML = 'Guardar Registro'; }
     };
   }
 }
