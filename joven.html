@@ -113,8 +113,8 @@
                     <input type="number" class="form-control" name="Edad" min="18" max="29" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">INE / OCR / Pasaporte</label>
-                    <input type="text" class="form-control" name="INE_OCR" required>
+                    <label class="form-label">Número de INE / OCR / Pasaporte (Opcional)</label>
+                    <input type="text" class="form-control" name="INE_OCR">
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Apellido Paterno</label>
@@ -128,12 +128,36 @@
                     <label class="form-label">Nombre(s)</label>
                     <input type="text" class="form-control" name="Nombres" required>
                 </div>
+                <div class="col-md-6">
+                    <label class="form-label">¿Eres hablante de lengua indígena?</label>
+                    <select class="form-select" id="selectLengua" name="Es_Hablante" required onchange="toggleLengua()">
+                        <option value="">Seleccione...</option>
+                        <option value="SI">Sí</option>
+                        <option value="NO">No</option>
+                    </select>
+                </div>
+                <div class="col-md-6" id="divCualLengua" style="display: none;">
+                    <label class="form-label">¿Cuál?</label>
+                    <input type="text" class="form-control" id="cualLengua" placeholder="Especifique la lengua">
+                </div>
                 <div class="col-md-12">
-                    <label class="form-label">Tipo de Discapacidad (Opcional)</label>
-                    <input type="text" class="form-control" name="Tipo_Discapacidad">
+                    <label class="form-label">¿Cuentas con alguna discapacidad?</label>
+                    <select class="form-select" name="Tiene_Discapacidad" id="selectTieneDiscapacidad" required onchange="toggleDiscapacidad()">
+                        <option value="">Seleccione...</option>
+                        <option value="SI">Sí</option>
+                        <option value="NO">No</option>
+                    </select>
+                </div>
+                <div class="col-md-12" id="divTipoDiscapacidad" style="display: none;">
+                    <label class="form-label text-danger">Selecciona al menos una:</label>
+                    <input type="hidden" name="Tipo_Discapacidad" id="HiddenDiscapacidad">
+                    <div class="form-check"><input class="form-check-input chk-disc" type="checkbox" value="INTELECTUAL"> Discapacidad Intelectual (TEA, Intelectual, Síndrome de Down)</div>
+                    <div class="form-check"><input class="form-check-input chk-disc" type="checkbox" value="MENTAL"> Discapacidad Mental (Trastornos psiquiátricos, emocionales)</div>
+                    <div class="form-check"><input class="form-check-input chk-disc" type="checkbox" value="MOTRIZ"> Discapacidad Motriz (Dificultad para caminar, escribir, etc.)</div>
+                    <div class="form-check"><input class="form-check-input chk-disc" type="checkbox" value="MULTIPLE"> Discapacidad Múltiple</div>
+                    <div class="form-check"><input class="form-check-input chk-disc" type="checkbox" value="SENSORIAL"> Discapacidad Sensorial (Auditiva, visual, lenguaje)</div>
                 </div>
             </div>
-
             <!-- 2. Contacto -->
             <h4 class="seccion-titulo">2. CONTACTO</h4>
             <div class="row g-3">
@@ -218,20 +242,7 @@
                     <label class="form-label">Referencia</label>
                     <input type="text" class="form-control" name="Referencia" required>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label">¿Eres hablante de lengua indígena?</label>
-                    <select class="form-select" id="selectLengua" name="Es_Hablante" required onchange="toggleLengua()">
-                        <option value="">Seleccione...</option>
-                        <option value="SI">Sí</option>
-                        <option value="NO">No</option>
-                    </select>
-                </div>
-                <div class="col-md-6" id="divCualLengua" style="display: none;">
-                    <label class="form-label">¿Cuál?</label>
-                    <input type="text" class="form-control" id="cualLengua" placeholder="Especifique">
-                </div>
-            </div>
-
+                
             <!-- 5. Familiar -->
             <h4 class="seccion-titulo">5. DATOS DE CONTACTO DE UN FAMILIAR</h4>
             <div class="row g-3">
@@ -316,15 +327,15 @@
             <h4 class="seccion-titulo">DATOS DE VINCULACIÓN</h4>
             <div class="row g-3">
                 <div class="col-md-4">
-                    <label class="form-label">Folio del CT FURT</label>
-                    <input type="text" class="form-control" name="Folio_CT_FURT" required>
+                    <label class="form-label">Folio del CT FURT (Opcional)</label>
+                    <input type="number" class="form-control" name="Folio_CT_FURT">
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Nombre Comercial</label>
                     <input type="text" class="form-control" name="Vinculacion_NombreComercial" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Razón Social</label>
+                    <label class="form-label">Razón Social (Opcional)</label>
                     <input type="text" class="form-control" name="Vinculacion_RazonSocial">
                 </div>
                 <div class="col-md-4">
@@ -340,8 +351,8 @@
                     <input type="text" class="form-control" name="Tutor_Nombres" required>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Folio del Plan de Actividades</label>
-                    <input type="text" class="form-control" name="Folio_Plan" required>
+                    <label class="form-label">Folio del Plan de Actividades (Opcional)</label>
+                    <input type="number" class="form-control" name="Folio_Plan">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Nombre del Plan de Actividades</label>
@@ -349,27 +360,35 @@
                 </div>
                 <div class="col-md-12">
                     <label class="form-label">Domicilio del Centro de Trabajo</label>
-                    <input type="text" class="form-control" name="Domicilio_CT" required>
+                    <input type="text" class="form-control" id="domicilioCT" name="Domicilio_CT" required>
                 </div>
                 <div class="col-md-12">
+                    <label class="form-label">¿La sucursal tiene el mismo domicilio que el Centro de Trabajo?</label>
+                    <select class="form-select" id="mismaDireccion" onchange="toggleSucursal()" required>
+                        <option value="">Seleccione...</option>
+                        <option value="SI">Sí</option>
+                        <option value="NO">No</option>
+                    </select>
+                </div>
+                <div class="col-md-12" id="divDomSucursal" style="display:none;">
                     <label class="form-label">Domicilio de la Sucursal</label>
-                    <input type="text" class="form-control" name="Domicilio_Sucursal">
+                    <input type="text" class="form-control" name="Domicilio_Sucursal" id="domicilioSucursal">
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Teléfono del CT</label>
                     <input type="text" class="form-control" name="Vinculacion_Tel_CT" pattern="\d{10}" title="Debe contener 10 dígitos numéricos" maxlength="10" required>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Teléfono Móvil del Tutor</label>
-                    <input type="text" class="form-control" name="Vinculacion_Tel_Tutor" pattern="\d{10}" title="Debe contener 10 dígitos numéricos" maxlength="10" required>
+                    <label class="form-label">Teléfono Móvil del Tutor (Opcional)</label>
+                    <input type="text" class="form-control" name="Vinculacion_Tel_Tutor" pattern="\d{10}" title="Debe contener 10 dígitos numéricos" maxlength="10">
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Folio Sucursal</label>
-                    <input type="text" class="form-control" name="Folio_Sucursal">
+                    <label class="form-label">Folio Sucursal (Opcional)</label>
+                    <input type="number" class="form-control" name="Folio_Sucursal">
                 </div>
                 <div class="col-md-12">
                     <label class="form-label">Fecha de Inicio de Capacitación</label>
-                    <input type="date" class="form-control" name="Fecha_Inicio" required>
+                    <input type="date" class="form-control" name="Fecha_Inicio" id="fechaInicioInput" required>
                 </div>
             </div>
 
@@ -487,6 +506,98 @@
         "Yucatán": ["Abalá", "Acanceh", "Akil", "Baca", "Bokobá", "Buctzotz", "Cacalchén", "Calotmul", "Cansahcab", "Cantamayec", "Celestún", "Cenotillo", "Chacsinkín", "Chankom", "Chapab", "Chemax", "Chichimilá", "Chicxulub Pueblo", "Chikindzonot", "Chocholá", "Chumayel", "Conkal", "Cuncunul", "Cuzamá", "Dzán", "Dzemul", "Dzidzantún", "Dzilam de Bravo", "Dzilam González", "Dzitás", "Dzoncauich", "Espita", "Halachó", "Hocabá", "Hoctún", "Homún", "Huhí", "Hunucmá", "Ixil", "Izamal", "Kanasín", "Kantunil", "Kaua", "Kinchil", "Kopomá", "Mama", "Maní", "Maxcanú", "Mayapán", "Mérida", "Mocochá", "Motul", "Muna", "Muxupip", "Opichén", "Oxkutzcab", "Panabá", "Peto", "Progreso", "Quintana Roo", "Río Lagartos", "Sacalum", "Samahil", "Sanahcat", "San Felipe", "Santa Elena", "Seyé", "Sinanché", "Sotuta", "Sucilá", "Sudzal", "Suma", "Tahdziú", "Tahmek", "Teabo", "Tecoh", "Tekal de Venegas", "Tekantó", "Tekax", "Tekit", "Tekom", "Telchac Pueblo", "Telchac Puerto", "Temax", "Temozón", "Tepakán", "Tetiz", "Teya", "Ticul", "Timucuy", "Tinum", "Tixcacalcupul", "Tixkokob", "Tixmehuac", "Tixpéhual", "Tizimín", "Tunkás", "Tzucacab", "Uayma", "Ucú", "Umán", "Valladolid", "Xocchel", "Yaxcabá", "Yaxkukul", "Yobaín"],
         "Zacatecas": ["Apozol", "Apulco", "Atolinga", "Benito Juárez", "Calera", "Cañitas de Felipe Pescador", "Chalchihuites", "Concepción del Oro", "Cuauhtémoc", "El Plateado de Joaquín Amaro", "El Salvador", "Fresnillo", "Genaro Codina", "General Enrique Estrada", "General Francisco R. Murguía", "General Pánfilo Natera", "Guadalupe", "Huanusco", "Jalpa", "Jerez", "Jiménez del Teul", "Juan Aldama", "Juchipila", "Loreto", "Luis Moya", "Mazapil", "Melchor Ocampo", "Mezquital del Oro", "Miguel Auza", "Momax", "Monte Escobedo", "Morelos", "Moyahua de Estrada", "Nochistlán de Mejía", "Noria de Ángeles", "Ojocaliente", "Pánuco", "Pinos", "Río Grande", "Sain Alto", "Santa María de la Paz", "Sombrerete", "Susticacán", "Tabasco", "Tepechitlán", "Tepetongo", "Teúl de González Ortega", "Tlaltenango de Sánchez Román", "Trancoso", "Trinidad García de la Cadena", "Valparaíso", "Vetagrande", "Villa de Cos", "Villa García", "Villa González Ortega", "Villa Hidalgo", "Villanueva", "Zacatecas"]
     };
+    function toggleDiscapacidad() {
+        const selectTiene = document.getElementById('selectTieneDiscapacidad');
+        const divTipo = document.getElementById('divTipoDiscapacidad');
+        if (selectTiene.value === 'SI') {
+            divTipo.style.display = 'block';
+        } else {
+            divTipo.style.display = 'none';
+            // Desmarca las casillas si escoge NO
+            document.querySelectorAll('.chk-disc').forEach(cb => cb.checked = false);
+        }
+    }
+
+    function toggleSucursal() {
+        const sel = document.getElementById('mismaDireccion');
+        const divDom = document.getElementById('divDomSucursal');
+        const inDom = document.getElementById('domicilioSucursal');
+        const inCT = document.getElementById('domicilioCT');
+
+        if (sel.value === 'SI') {
+            divDom.style.display = 'none';
+            inDom.value = inCT.value;
+            inDom.readOnly = true;
+            inDom.required = false;
+        } else if (sel.value === 'NO') {
+            divDom.style.display = 'block';
+            inDom.value = '';
+            inDom.readOnly = false;
+            inDom.required = true;
+        } else {
+            divDom.style.display = 'none';
+            inDom.value = '';
+            inDom.required = false;
+        }
+    }
+
+    // Interceptar el botón de enviar para validar casillas
+    document.getElementById('formJoven').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const selectDisc = document.getElementById('selectTieneDiscapacidad');
+        const chkDisc = document.querySelectorAll('.chk-disc:checked');
+        
+        if (selectDisc && selectDisc.value === 'SI') {
+            if (chkDisc.length === 0) {
+                alert('❌ Debes seleccionar al menos un tipo de discapacidad.');
+                return;
+            }
+            document.getElementById('HiddenDiscapacidad').value = Array.from(chkDisc).map(cb => cb.value).join(', ');
+        } else {
+            document.getElementById('HiddenDiscapacidad').value = "";
+        }
+        
+        submitForm(this, 'JOVEN');
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        // Validación de fecha mínima (Hoy)
+        const fechaInput = document.getElementById('fechaInicioInput');
+        if (fechaInput) {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            fechaInput.min = `${yyyy}-${mm}-${dd}`;
+        }
+    });
+
+    // Validación estricta para borrar el campo si inventan un estado o municipio
+    const inputE = document.getElementById('inputEstado');
+    const inputM = document.getElementById('inputMunicipio');
+    const listaE = document.getElementById('listaEstados');
+    const listaM = document.getElementById('listaMunicipios');
+
+    inputE.addEventListener('change', function() {
+        const val = this.value;
+        const exists = Array.from(listaE.options).some(opt => opt.value === val);
+        if (!exists) { 
+            this.value = ''; 
+            inputM.value = ''; 
+            listaM.innerHTML = ''; 
+            alert('❌ Debes seleccionar un Estado válido de la lista.');
+        }
+    });
+
+    inputM.addEventListener('change', function() {
+        const val = this.value;
+        const exists = Array.from(listaM.options).some(opt => opt.value === val);
+        if (!exists && val !== '') { 
+            this.value = ''; 
+            alert('❌ Debes seleccionar un Municipio válido de la lista.');
+        }
+    });
     
 </script>
 </body>
