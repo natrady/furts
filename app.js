@@ -71,10 +71,11 @@ document.querySelectorAll('input[type="file"]').forEach(input => {
 async function submitForm(formElement, formType) {
   const formData = new FormData(formElement);
   const btnSubmit = document.getElementById('btnSubmit');
-  if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.innerHTML = '⏳ Guardando, no cierres...'; }
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  if (btnSubmit) { btnSubmit.disabled = true; }
+  if (loadingOverlay) { loadingOverlay.classList.remove('d-none'); }
 
   const payload = { formType: formType, fields: {}, images: {} };
-
   for (let [key, value] of formData.entries()) {
     if (typeof value === 'string') payload.fields[key] = value;
   }
@@ -105,7 +106,8 @@ async function submitForm(formElement, formType) {
     alert("✅ ¡Registro guardado en Sheets y Drive con éxito!");
     formElement.reset();
     
-  if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerHTML = 'Guardar Registro'; }
+  if (loadingOverlay) { loadingOverlay.classList.add('d-none'); }
+    if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerHTML = '💾 Guardar Registro'; }
 
   } catch (error) {
     const tx = db.transaction(STORE_NAME, 'readwrite');
@@ -114,11 +116,11 @@ async function submitForm(formElement, formType) {
       updatePendingCount();
       alert("Sin conexión. Registro guardado localmente 💾");
       formElement.reset();
-      if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerHTML = 'Guardar Registro'; }
+      if (loadingOverlay) { loadingOverlay.classList.add('d-none'); }
+      if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerHTML = '💾 Guardar Registro'; }
     };
   }
 }
-
 // 6. Contador y Sincronizador
 function updatePendingCount() {
   const tx = db.transaction(STORE_NAME, 'readonly');
@@ -146,12 +148,14 @@ async function syncPending() {
     }
 
     alert(`🚀 Iniciando envío de ${registros.length} registro(s) pendiente(s)... Por favor, no cierres la app.`);
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) { loadingOverlay.classList.remove('d-none'); }
     let enviados = 0;
 
     for (let record of registros) {
       try {
         // OJO: Pega aquí la misma URL de Apps Script que usaste arriba
-        const response = await fetch('AQUI_PEGA_TU_URL_LARGA_DE_APPS_SCRIPT', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycby7kqN1YCUbgjA_RJHpsMkQmo4IsTZeC2pXElzAkvwYGvaz2iUuNIQbT2_f7oCpkxCV/exec', {
           method: 'POST',
           body: JSON.stringify(record)
         });
@@ -170,6 +174,8 @@ async function syncPending() {
     }
 
     updatePendingCount(); // Actualiza el botón para que vuelva a decir "Pendientes: 0"
+    if (loadingOverlay) { loadingOverlay.classList.add('d-none'); }
+    
     if (enviados > 0) alert(`✅ ¡Se enviaron ${enviados} registro(s) con éxito al servidor!`);
     else alert("⚠️ Hubo un problema de conexión. Intenta de nuevo más tarde.");
   };
