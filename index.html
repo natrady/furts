@@ -166,7 +166,10 @@
                 <input type="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" class="form-control" name="Correo" placeholder="ejemplo@correo.com" required>
             </div>
         </div>
-
+<div class="col-md-4">
+                    <label class="form-label">Folio del CT FURT (Opcional)</label>
+                    <input type="number" class="form-control" name="Folio_CT_FURT">
+                </div>
         <div class="mt-4 text-end">
                 <button type="button" class="btn btn-next px-5 py-2 fw-bold" onclick="irAlPasoJS(2)">Siguiente ➜</button>
             </div>
@@ -348,22 +351,20 @@
             </div>
             <div class="col-md-6">
                     <label class="form-label">¿El CT puede recibir jóvenes con discapacidad?</label>
-                    <select class="form-select" name="Acepta_Discapacidad" id="selectAceptaDiscapacidad" required onchange="toggleDiscapacidad()">
+                    <select class="form-select" name="Acepta_Discapacidad" id="selectAceptaDiscapacidad" required onchange="toggleDiscapacidadCT()">
                         <option value="">Seleccione...</option>
                         <option value="SI">Sí</option>
                         <option value="NO">No</option>
                     </select>
                 </div>
                 <div class="col-md-12" id="divTipoDiscapacidad" style="display: none;">
-                    <label class="form-label">¿Cuál?</label>
-                    <select class="form-select" id="tipoDiscapacidad">
-                        <option value="">Seleccione el tipo...</option>
-                        <option value="INTELECTUAL">Discapacidad Intelectual (TEA, Intelectual, Síndrome de Down)</option>
-                        <option value="MENTAL">Discapacidad Mental (Trastornos psiquiátricos, emocionales o del comportamiento)</option>
-                        <option value="MOTRIZ">Discapacidad Motriz (Dificultad para caminar, mantener equilibrio, escribir, etc.)</option>
-                        <option value="MULTIPLE">Discapacidad Múltiple (Discapacidades múltiples y otro tipo)</option>
-                        <option value="SENSORIAL">Discapacidad Sensorial (Auditiva, visual, lenguaje y comunicación)</option>
-                    </select>
+                    <label class="form-label text-danger">Selecciona al menos una:</label>
+                    <input type="hidden" name="Tipo_Discapacidad" id="HiddenDiscapacidad">
+                    <div class="form-check"><input class="form-check-input chk-disc" type="checkbox" value="INTELECTUAL"> Discapacidad Intelectual (TEA, Intelectual, Síndrome de Down)</div>
+                    <div class="form-check"><input class="form-check-input chk-disc" type="checkbox" value="MENTAL"> Discapacidad Mental (Trastornos psiquiátricos, emocionales)</div>
+                    <div class="form-check"><input class="form-check-input chk-disc" type="checkbox" value="MOTRIZ"> Discapacidad Motriz (Dificultad para caminar, escribir, etc.)</div>
+                    <div class="form-check"><input class="form-check-input chk-disc" type="checkbox" value="MULTIPLE"> Discapacidad Múltiple</div>
+                    <div class="form-check"><input class="form-check-input chk-disc" type="checkbox" value="SENSORIAL"> Discapacidad Sensorial (Auditiva, visual, lenguaje)</div>
                 </div>
             
             <div class="col-md-12 mt-3">
@@ -396,7 +397,7 @@
         
         <div class="mt-5 text-center text-muted" style="font-size: 0.75rem;">
             <p>"Este formato no garantiza ni formaliza su participación en el Programa Jóvenes Construyendo el Futuro, en virtud de que se verificará previamente que cumple con los requisitos establecidos en las Reglas de Operación del Programa vigentes."</p>
-            <p class="fw-bold">Versión 1.8</p>
+            <p class="fw-bold">Versión 1.9</p>
         </div>
     </form>
 </div>
@@ -500,8 +501,23 @@
         }
     }
 
-    document.getElementById('formCT').addEventListener('submit', function(e) {        e.preventDefault();
+    document.getElementById('formCT').addEventListener('submit', function(e) {
+        e.preventDefault();
         
+        // Validación de casillas de discapacidad
+        const selectDisc = document.getElementById('selectAceptaDiscapacidad');
+        const chkDisc = document.querySelectorAll('.chk-disc:checked');
+        if (selectDisc && selectDisc.value === 'SI') {
+            if (chkDisc.length === 0) {
+                alert('❌ Debes seleccionar al menos un tipo de discapacidad.');
+                return;
+            }
+            document.getElementById('HiddenDiscapacidad').value = Array.from(chkDisc).map(cb => cb.value).join(', ');
+        } else {
+            document.getElementById('HiddenDiscapacidad').value = "";
+        }
+
+        // Validación de días
         const checkboxes = document.querySelectorAll('.dias-cap:checked');
         if (checkboxes.length !== 5) {
             alert('❌ Debes seleccionar EXACTAMENTE 5 días.');
@@ -511,7 +527,6 @@
         
         const entrada = document.getElementById('horaEntrada').value;
         const salida = document.getElementById('horaSalida').value;
-        
         if (entrada && salida) {
             const [hE, mE] = entrada.split(':').map(Number);
             const [hS, mS] = salida.split(':').map(Number);
@@ -519,7 +534,6 @@
             let minS = (hS * 60) + mS;
             if (minS < minE) minS += 24 * 60;
             const diff = (minS - minE) / 60;
-            
             if (diff < 5 || diff > 8) {
                 alert('❌ El horario debe ser de 5 a 8 horas diarias.');
                 return;
