@@ -8,28 +8,50 @@
     <meta name="theme-color" content="#611232">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        :root { --stps-dark: #161a1d; --stps-grey: #98989A; --stps-red: #9b2247; --stps-darkred: #611232; --stps-green: #1e5b4f; }
-        body { background-color: #f6f3ee; color: var(--stps-dark); }
-        .header-institucional { background-color: var(--stps-darkred); color: white; }
-        .seccion-titulo { color: var(--stps-green); border-bottom: 2px solid var(--stps-grey); padding-bottom: 5px; margin-top: 20px;}
-        .btn-enviar { background-color: var(--stps-red); color: white; border: none; }
-        .btn-flotante { position: fixed; right: 20px; z-index: 1000; background-color: var(--stps-green); color: white; border: none; border-radius: 50%; width: 45px; height: 45px; font-weight: bold; box-shadow: 0px 4px 6px rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; cursor: pointer;}
-            .btn-flotante-arriba { bottom: 80px; }
-            .btn-flotante-abajo { bottom: 20px; }
+        :root { --stps-dark: #161a1d; --stps-grey: #98989A; --stps-gold: #b38e5d; --stps-darkgold: #8b6530; --stps-guinda: #611232; }
+        body { background-color: #f6f3ee; color: var(--stps-dark); padding-top: 140px; }
+        
+        /* Barra de navegación superior fija */
+        .sticky-top-bar { position: fixed; top: 0; left: 0; width: 100%; z-index: 1050; background-color: #f8f9fa; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .nav-tabs .nav-link { color: var(--stps-grey); font-weight: bold; }
+        .nav-tabs .nav-link.active { color: var(--stps-gold); border-bottom: 3px solid var(--stps-gold); background-color: transparent;}
+        
+        .header-institucional { background-color: var(--stps-gold); color: white; }
+        .seccion-titulo { color: var(--stps-darkgold); border-bottom: 2px solid var(--stps-grey); padding-bottom: 5px; margin-top: 20px;}
+        .btn-enviar, .btn-next { background-color: var(--stps-gold); color: white; border: none; }
+        .btn-prev { background-color: var(--stps-grey); color: white; border: none; }
+        .form-control:focus, .form-select:focus { border-color: var(--stps-gold); box-shadow: 0 0 0 0.25rem rgba(179, 142, 93, 0.25); }
+        
+        /* Ocultar/Mostrar los pasos */
+        .step-pane { display: none; } 
+        .step-pane.active { display: block; }
+        
+        /* Botones flotantes dorados */
+        .btn-flotante { position: fixed; right: 20px; z-index: 1000; background-color: var(--stps-darkgold); color: white; border: none; border-radius: 50%; width: 45px; height: 45px; font-weight: bold; box-shadow: 0px 4px 6px rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; cursor: pointer;}
+        .btn-flotante-arriba { bottom: 80px; } .btn-flotante-abajo { bottom: 20px; }
     </style>
 </head>
 <body>
 
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4 header-institucional p-3 rounded">
-        <h2 class="m-0">FORMATO ÚNICO DE REGISTRO TERRITORIAL (CENTRO DE TRABAJO)</h2>
+<!-- Barra Superior Fija -->
+<div class="sticky-top-bar">
+    <ul class="nav nav-tabs px-3 pt-2">
+        <li class="nav-item"><a class="nav-link active" href="#">Registro CT</a></li>
+        <li class="nav-item"><a class="nav-link" href="joven.html" style="color: var(--stps-guinda);">Registro Joven</a></li>
+    </ul>
+    <div class="d-flex justify-content-between align-items-center p-3 header-institucional">
+        <h5 class="m-0 fw-bold">FURT - CENTRO DE TRABAJO</h5>
         <div class="text-end">
-            <span class="badge bg-light text-dark mb-1">v1.1</span><br>
-            <button id="sync-counter" class="btn btn-warning fw-bold text-dark" onclick="syncPending()">Pendientes: 0</button>
+            <span class="badge bg-light text-dark mb-1">v1.2</span><br>
+            <button id="sync-counter" class="btn btn-light btn-sm fw-bold text-dark" onclick="syncPending()">Pendientes: 0</button>
         </div>
     </div>
+</div>
 
+<div class="container pb-4">
     <form id="formCT">
+        <!-- PÁGINA 1 -->
+        <div class="step-pane active" id="step1">
         <!-- SECCIÓN SERVIDOR PÚBLICO -->
         <h4 class="seccion-titulo">DATOS DE ATENCIÓN</h4>
         <div class="row g-3">
@@ -127,8 +149,15 @@
             </div>
         </div>
 
-        <!-- 3 & 4. Trabajadores y Domicilio -->
-        <h4 class="seccion-titulo">3. TRABAJADORES Y 4. DOMICILIO</h4>
+        <div class="mt-4 text-end">
+                <button type="button" class="btn btn-next px-5 py-2 fw-bold" onclick="irAlPaso(1, 2)">Siguiente ➜</button>
+            </div>
+        </div>
+
+        <!-- PÁGINA 2 -->
+        <div class="step-pane" id="step2">
+            <!-- 3 & 4. Trabajadores y Domicilio -->
+            <h4 class="seccion-titulo">3. TRABAJADORES Y 4. DOMICILIO</h4>
         <div class="row g-3">
              <div class="col-md-4">
                 <label class="form-label">Número de Trabajadores</label> <!--[cite: 1] -->
@@ -199,8 +228,16 @@
             </div>
         </div>
 
-        <!-- 6. Fotos Representante y CT -->
-        <h4 class="seccion-titulo">6. FOTOS REPRESENTANTE Y CT</h4>
+        <div class="mt-4 d-flex justify-content-between">
+                <button type="button" class="btn btn-prev px-4 py-2 fw-bold" onclick="irAlPaso(2, 1)">⬅ Anterior</button>
+                <button type="button" class="btn btn-next px-4 py-2 fw-bold" onclick="irAlPaso(2, 3)">Siguiente ➜</button>
+            </div>
+        </div>
+
+        <!-- PÁGINA 3 -->
+        <div class="step-pane" id="step3">
+            <!-- 6. Fotos Representante y CT -->
+            <h4 class="seccion-titulo">6. FOTOS REPRESENTANTE Y CT</h4>
         <div class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">INE Frente (Rep)</label>
@@ -313,14 +350,34 @@
             </div>
         </div>
 
-        <div class="mt-4 text-end">
-            <button type="submit" id="btnSubmit" class="btn btn-enviar px-5 py-2">Guardar Registro</button>
+        <div class="mt-4 d-flex justify-content-between">
+                <button type="button" class="btn btn-prev px-4 py-2 fw-bold" onclick="irAlPaso(3, 2)">⬅ Anterior</button>
+                <button type="submit" id="btnSubmit" class="btn btn-enviar px-5 py-2 fw-bold">💾 Guardar Registro</button>
+            </div>
         </div>
     </form>
 </div>
 
 <script src="app.js"></script>
 <script>
+    function irAlPaso(pasoActual, pasoDestino) {
+        if (pasoDestino > pasoActual) {
+            const inputs = document.getElementById('step' + pasoActual).querySelectorAll('input, select, textarea');
+            let todoValido = true;
+            for (let input of inputs) {
+                if (!input.checkValidity()) {
+                    input.reportValidity();
+                    todoValido = false;
+                    break;
+                }
+            }
+            if (!todoValido) return;
+        }
+        document.querySelectorAll('.step-pane').forEach(el => el.classList.remove('active'));
+        document.getElementById('step' + pasoDestino).classList.add('active');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
     function toggleOtroActividad() {
         const select = document.getElementById('actividadEconomica');
         const divOtro = document.getElementById('divOtroActividad');
