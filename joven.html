@@ -106,11 +106,11 @@
             <div class="row g-3">
                 <div class="col-md-4">
                     <label class="form-label">CURP</label>
-                    <input type="text" class="form-control" name="CURP" pattern="^[A-Z][AEIOUX][A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HMX](AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]\d$" title="Debe ser una CURP válida (18 caracteres)" required>
+                    <input type="text" class="form-control" name="CURP" id="curpJoven" pattern="^[A-Z][AEIOUX][A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HMX](AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]\d$" title="Debe ser una CURP válida (18 caracteres)" required>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Edad</label>
-                    <input type="number" class="form-control" name="Edad" min="18" max="29" required>
+                    <input type="number" class="form-control" name="Edad" id="edadJoven" min="18" max="29" required>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Número de INE / OCR / Pasaporte (Opcional)</label>
@@ -400,6 +400,7 @@
         
         <div class="mt-5 text-center text-muted" style="font-size: 0.75rem;">
             <p>"Este formato no garantiza ni formaliza su participación en el Programa Jóvenes Construyendo el Futuro, en virtud de que se verificará previamente que cumple con los requisitos establecidos en las Reglas de Operación del Programa vigentes."</p>
+        <p class="fw-bold">Versión 1.9</p>
         </div>
     </form>
 </div>
@@ -561,8 +562,13 @@
         submitForm(this, 'JOVEN');
     });
 
+    const inputE = document.getElementById('inputEstado');
+    const inputM = document.getElementById('inputMunicipio');
+    const listaE = document.getElementById('listaEstados');
+    const listaM = document.getElementById('listaMunicipios');
+
     window.addEventListener('DOMContentLoaded', () => {
-        // Validación de fecha mínima (Hoy)
+        // 1. Validación de fecha mínima (Hoy)
         const fechaInput = document.getElementById('fechaInicioInput');
         if (fechaInput) {
             const today = new Date();
@@ -571,18 +577,39 @@
             const dd = String(today.getDate()).padStart(2, '0');
             fechaInput.min = `${yyyy}-${mm}-${dd}`;
         }
+        
+        // 2. Llenar lista de Estados al cargar la página
+        const estados = Object.keys(catalogoLugares).sort();
+        estados.forEach(estado => {
+            const opcion = document.createElement('option');
+            opcion.value = estado.toUpperCase();
+            listaE.appendChild(opcion);
+        });
     });
 
-    // Validación estricta para borrar el campo si inventan un estado o municipio
-    const inputE = document.getElementById('inputEstado');
-    const inputM = document.getElementById('inputMunicipio');
-    const listaE = document.getElementById('listaEstados');
-    const listaM = document.getElementById('listaMunicipios');
+    // 3. Llenar lista de Municipios cuando se escribe el Estado
+    inputE.addEventListener('input', function() {
+        const estadoSeleccionado = this.value;
+        const estadoReal = Object.keys(catalogoLugares).find(k => k.toUpperCase() === estadoSeleccionado.toUpperCase());
+        
+        listaM.innerHTML = '';
+        inputM.value = '';
+        
+        if (estadoReal && catalogoLugares[estadoReal]) {
+            const municipios = catalogoLugares[estadoReal].sort();
+            municipios.forEach(municipio => {
+                const opcion = document.createElement('option');
+                opcion.value = municipio.toUpperCase();
+                listaM.appendChild(opcion);
+            });
+        }
+    });
 
+    // 4. Validación estricta (no deja inventar)
     inputE.addEventListener('change', function() {
         const val = this.value;
         const exists = Array.from(listaE.options).some(opt => opt.value === val);
-        if (!exists) { 
+        if (!exists && val !== '') { 
             this.value = ''; 
             inputM.value = ''; 
             listaM.innerHTML = ''; 
@@ -598,7 +625,44 @@
             alert('❌ Debes seleccionar un Municipio válido de la lista.');
         }
     });
-    
+
+    // Cálculo de edad desde CURP
+    const inputCurp = document.getElementById('curpJoven');
+    const inputEdad = document.getElementById('edadJoven');
+    if (inputCurp && inputEdad) {
+        inputCurp.addEventListener('input', function() {
+            let curp = this.value.toUpperCase();
+            this.value = curp; // Forzar mayúsculas
+            
+            if (curp.length >= 10) {
+                let yearStr = curp.substring(4, 6);
+                let monthStr = curp.substring(6, 8);
+                let dayStr = curp.substring(8, 10);
+                
+                let year = parseInt(yearStr, 10);
+                let month = parseInt(monthStr, 10) - 1;
+                let day = parseInt(dayStr, 10);
+                
+                // Determinar siglo (si nació en el 97-99 o en los 2000s)
+                year += (year < 50) ? 2000 : 1900; 
+                
+                let fechaNac = new Date(year, month, day);
+                let hoy = new Date();
+                let edad = hoy.getFullYear() - fechaNac.getFullYear();
+                let m = hoy.getMonth() - fechaNac.getMonth();
+                if (m < 0 || (m === 0 && hoy.getDate() < fechaNac.getDate())) {
+                    edad--;
+                }
+                
+                inputEdad.value = edad;
+                
+                if (curp.length === 18 && (edad < 18 || edad > 29)) {
+                    alert('❌ La edad calculada (' + edad + ' años) no está en el rango permitido (18 a 29 años).');
+                    inputEdad.value = ''; // Borramos para que no lo deje enviar
+                }
+            }
+        });
+    }
 </script>
 </body>
 </html>
