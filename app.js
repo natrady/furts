@@ -113,3 +113,49 @@ function updatePendingCount() {
     document.getElementById('sync-counter').textContent = `Pendientes: ${count}`;
   };
 }
+// 7. Sincronizar manualmente los pendientes
+async function syncPending() {
+  if (!navigator.onLine) {
+    alert("❌ Necesitas conexión a internet para sincronizar.");
+    return;
+  }
+
+  const tx = db.transaction(STORE_NAME, 'readonly');
+  const req = tx.objectStore(STORE_NAME).getAll();
+
+  req.onsuccess = async () => {
+    const registros = req.result;
+    if (registros.length === 0) {
+      alert("✅ No hay registros pendientes por enviar.");
+      return;
+    }
+
+    alert(`🚀 Iniciando envío de ${registros.length} registro(s) pendiente(s)... Por favor, no cierres la app.`);
+    let enviados = 0;
+
+    for (let record of registros) {
+      try {
+        // OJO: Pega aquí la misma URL de Apps Script que usaste arriba
+        const response = await fetch('AQUI_PEGA_TU_URL_LARGA_DE_APPS_SCRIPT', {
+          method: 'POST',
+          body: JSON.stringify(record)
+        });
+
+        if (!response.ok) throw new Error('Error de red');
+        
+        // Si se envió bien, lo eliminamos de la memoria local
+        const delTx = db.transaction(STORE_NAME, 'readwrite');
+        delTx.objectStore(STORE_NAME).delete(record.id);
+        enviados++;
+
+      } catch (error) {
+        console.error("Fallo al enviar registro:", error);
+        break; // Rompemos el ciclo si falla uno para no colapsar la app
+      }
+    }
+
+    updatePendingCount(); // Actualiza el botón para que vuelva a decir "Pendientes: 0"
+    if (enviados > 0) alert(`✅ ¡Se enviaron ${enviados} registro(s) con éxito al servidor!`);
+    else alert("⚠️ Hubo un problema de conexión. Intenta de nuevo más tarde.");
+  };
+}
