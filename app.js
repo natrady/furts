@@ -89,8 +89,17 @@ async function submitForm(formElement, formType) {
       body: JSON.stringify(payload)
     });
     
+    const data = await response.json();
+    
+    // Si Google nos manda un error interno, lo mostramos y detenemos todo
+    if (data.status === 'error') {
+        alert("❌ El servidor respondió, pero falló internamente: " + data.message);
+        return; 
+    }
+
     if (!response.ok) throw new Error('Network error');
-    alert("¡Registro enviado con éxito!");
+    
+    alert("✅ ¡Registro guardado en Sheets y Drive con éxito!");
     formElement.reset();
     
   } catch (error) {
