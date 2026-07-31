@@ -84,7 +84,7 @@ async function submitForm(formElement, formType) {
   });
 
   try {
-    const response = await fetch('https://docs.google.com/spreadsheets/d/1uAE_q7Y9g292sQWZWF8L0j90B8gaReou-67IjrxD76w/edit?gid=0#gid=0', {
+    const response = await fetch('https://script.google.com/macros/s/AKfycby7kqN1YCUbgjA_RJHpsMkQmo4IsTZeC2pXElzAkvwYGvaz2iUuNIQbT2_f7oCpkxCV/exec', {
       method: 'POST',
       body: JSON.stringify(payload)
     });
