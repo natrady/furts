@@ -1,3 +1,10 @@
+// 0. Registrar Service Worker para PWA
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js')
+    .then(() => console.log('Motor offline encendido 🚀'))
+    .catch(err => console.error('Falla en Service Worker:', err));
+}
+
 const DB_NAME = 'RegistroTerritorialDB';
 const STORE_NAME = 'pendientes';
 let db;
