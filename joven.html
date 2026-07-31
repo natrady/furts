@@ -589,11 +589,10 @@
 
     // 3. Llenar lista de Municipios cuando se escribe el Estado
     inputE.addEventListener('input', function() {
-        const estadoSeleccionado = this.value;
-        const estadoReal = Object.keys(catalogoLugares).find(k => k.toUpperCase() === estadoSeleccionado.toUpperCase());
+        const estadoSeleccionado = this.value.toUpperCase(); // Solo leemos, no interrumpimos tu escritura
+        const estadoReal = Object.keys(catalogoLugares).find(k => k.toUpperCase() === estadoSeleccionado);
         
         listaM.innerHTML = '';
-        inputM.value = '';
         
         if (estadoReal && catalogoLugares[estadoReal]) {
             const municipios = catalogoLugares[estadoReal].sort();
@@ -605,8 +604,9 @@
         }
     });
 
-    // 4. Validación estricta (no deja inventar)
+    // 4. Validación estricta y forzado a mayúsculas al terminar
     inputE.addEventListener('change', function() {
+        if (this.value) this.value = this.value.toUpperCase();
         const val = this.value;
         const exists = Array.from(listaE.options).some(opt => opt.value === val);
         if (!exists && val !== '') { 
@@ -618,6 +618,7 @@
     });
 
     inputM.addEventListener('change', function() {
+        if (this.value) this.value = this.value.toUpperCase();
         const val = this.value;
         const exists = Array.from(listaM.options).some(opt => opt.value === val);
         if (!exists && val !== '') { 
@@ -625,6 +626,10 @@
             alert('❌ Debes seleccionar un Municipio válido de la lista.');
         }
     });
+<!-- 3 líneas después: -->
+
+    // Cálculo de edad desde CURP
+    const inputCurp = document.getElementById('curpJoven');
 
     // Cálculo de edad desde CURP
     const inputCurp = document.getElementById('curpJoven');
@@ -654,12 +659,22 @@
                     edad--;
                 }
                 
-                inputEdad.value = edad;
-                
-                if (curp.length === 18 && (edad < 18 || edad > 29)) {
-                    alert('❌ La edad calculada (' + edad + ' años) no está en el rango permitido (18 a 29 años).');
-                    inputEdad.value = ''; // Borramos para que no lo deje enviar
+                if (curp.length === 18) {
+                    if (edad < 18 || edad > 29) {
+                        alert('❌ La edad calculada (' + edad + ' años) no está en el rango permitido (18 a 29 años).');
+                        inputCurp.setCustomValidity('Edad no permitida (' + edad + ' años).');
+                        inputEdad.value = ''; // La dejamos en blanco para que no estorbe
+                    } else {
+                        inputCurp.setCustomValidity('');
+                        inputEdad.value = edad; // Solo la ponemos si es válida
+                    }
+                } else {
+                    inputCurp.setCustomValidity('');
+                    inputEdad.value = edad; // Mostramos cómo va calculando
                 }
+            } else {
+                inputCurp.setCustomValidity('');
+                inputEdad.value = '';
             }
         });
     }
