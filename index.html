@@ -133,8 +133,8 @@
                 <input type="text" class="form-control" name="CURP_Rep" pattern="^[A-Z][AEIOUX][A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HM](AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]\d$" title="Debe ser una CURP válida (18 caracteres)" required>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Número de identificación de Representante</label>
-                <input type="text" class="form-control" name="Datos_Identificacion_Rep" required>
+                <label class="form-label">Número de identificación de Representante (Opcional)</label>
+                <input type="text" class="form-control" name="Datos_Identificacion_Rep">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Apellido Paterno Rep.</label> <!--[cite: 1] -->
@@ -278,8 +278,8 @@
                 <div id="badge-foto-solic"></div>
             </div>
              <div class="col-md-4">
-                <label class="form-label">Comprobante Domicilio</label>
-                <input class="form-control" type="file" id="foto-dom" name="Foto_Domicilio" accept="image/*" required>
+                <label class="form-label">Comprobante Domicilio (Opcional)</label>
+                <input class="form-control" type="file" id="foto-dom" name="Foto_Domicilio" accept="image/*">
                 <div id="badge-foto-dom"></div>
             </div>
             <div class="col-md-4">
@@ -343,8 +343,8 @@
                 <textarea class="form-control" name="Habilidades" rows="2" maxlength="500" required></textarea>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Número de jóvenes</label> <!--[cite: 1] -->
-                <input type="number" class="form-control" name="No_Jovenes" value="1" required>
+                <label class="form-label">Número de jóvenes</label>
+                <input type="number" class="form-control" name="No_Jovenes" value="1" readonly>
             </div>
             <div class="col-md-6">
                     <label class="form-label">¿El CT puede recibir jóvenes con discapacidad?</label>
@@ -396,7 +396,7 @@
         
         <div class="mt-5 text-center text-muted" style="font-size: 0.75rem;">
             <p>"Este formato no garantiza ni formaliza su participación en el Programa Jóvenes Construyendo el Futuro, en virtud de que se verificará previamente que cumple con los requisitos establecidos en las Reglas de Operación del Programa vigentes."</p>
-            <p class="fw-bold">Versión 1.6</p>
+            <p class="fw-bold">Versión 1.7</p>
         </div>
     </form>
 </div>
