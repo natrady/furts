@@ -32,14 +32,18 @@
                 <input type="text" class="form-control" name="Servidor_Publico" required>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Cargo</label> <!--[cite: 1] -->
-                <select class="form-select" name="Cargo" required>
+                <label class="form-label">Cargo</label>
+                <select class="form-select" id="selectCargo" name="Cargo" required onchange="toggleOtroCargo()">
                     <option value="">Seleccione...</option>
                     <option value="DIRECTOR">Director</option>
                     <option value="AUXILIAR">Auxiliar</option>
                     <option value="ENLACE">Enlace</option>
                     <option value="OTRO">Otro</option>
                 </select>
+            </div>
+            <div class="col-md-12" id="divOtroCargo" style="display: none;">
+                <label class="form-label">Especifique el cargo</label>
+                <input type="text" class="form-control" id="otroCargo" placeholder="Escriba el cargo">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Lugar de Registro</label> <!--[cite: 1] -->
@@ -57,8 +61,8 @@
         <h4 class="seccion-titulo">1. DATOS DEL CENTRO DE TRABAJO</h4>
         <div class="row g-3">
             <div class="col-md-6">
-                <label class="form-label">Tipo de Centro</label> <!--[cite: 1] -->
-                <select class="form-select" name="TipoCentro" required>
+                <label class="form-label">Tipo de Centro</label>
+                <select class="form-select" id="tipoCentro" name="TipoCentro" required onchange="toggleRFC()">
                     <option value="">Seleccione...</option>
                     <option value="FISICA">Persona Física</option>
                     <option value="MORAL">Persona Moral</option>
@@ -67,23 +71,23 @@
                 </select>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Razón Social (Opcional)</label> <!--[cite: 1] -->
+                <label class="form-label">Razón Social (Opcional)</label>
                 <input type="text" class="form-control" name="RazonSocial">
             </div>
             <div class="col-md-4">
-                <label class="form-label">Nombre Comercial</label> <!--[cite: 1] -->
+                <label class="form-label">Nombre Comercial</label>
                 <input type="text" class="form-control" name="NombreComercial" required>
             </div>
             <div class="col-md-4">
-                <label class="form-label">RFC</label> <!--[cite: 1] -->
-                <input type="text" class="form-control" name="RFC" required>
+                <label class="form-label">RFC <span id="reqRFC" class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="inputRFC" name="RFC" pattern="^[A-Z&Ñ]{3,4}\d{6}[A-Z0-9]{3}$" title="Debe ser un RFC válido (12 o 13 caracteres)" required>
             </div>
             <div class="col-md-4">
-                <label class="form-label">CURP del Representante</label> <!--[cite: 1] -->
-                <input type="text" class="form-control" name="CURP_Rep" required>
+                <label class="form-label">CURP del Representante</label>
+                <input type="text" class="form-control" name="CURP_Rep" pattern="^[A-Z][AEIOUX][A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HM](AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d]\d$" title="Debe ser una CURP válida (18 caracteres)" required>
             </div>
             <div class="col-md-4">
-                <label class="form-label">INE/Pasaporte Representante</label> <!--[cite: 1] -->
+                <label class="form-label">Número de identificación de Representante</label>
                 <input type="text" class="form-control" name="Datos_Identificacion_Rep" required>
             </div>
             <div class="col-md-4">
@@ -148,16 +152,16 @@
                 <input type="text" class="form-control" name="Municipio" placeholder="Escribe el municipio" required>
             </div>
             <div class="col-md-3">
-                <label class="form-label">C.P.</label> <!--[cite: 1] -->
-                <input type="text" class="form-control" name="CP" required>
+                <label class="form-label">C.P.</label>
+                <input type="text" class="form-control" name="CP" pattern="\d{5}" title="Debe contener 5 dígitos" required>
             </div>
-            <div class="col-md-4">
-                <label class="form-label">Calle y Colonia</label> <!--[cite: 1] -->
+            <div class="col-md-5">
+                <label class="form-label">Calle y Colonia</label>
                 <input type="text" class="form-control" name="CalleColonia" required>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">Números</label> <!--[cite: 1] -->
-                <input type="text" class="form-control" name="Numeros" required>
+            <div class="col-md-4">
+                <label class="form-label">Número Ext. e Int.</label>
+                <input type="text" class="form-control" name="Numeros" placeholder="Ej. Ext 10 Int 5 (Int. opcional)" required>
             </div>
             <div class="col-md-3">
                 <label class="form-label">Referencia</label> <!--[cite: 1] -->
@@ -168,13 +172,24 @@
         <!-- 5. Actividad -->
         <h4 class="seccion-titulo">5. TIPO DE ACTIVIDAD ECONÓMICA</h4>
         <div class="row g-3">
-            <div class="col-md-12"> <!--[cite: 1] -->
+            <div class="col-md-12">
                 <select class="form-select" id="actividadEconomica" name="Giro" required onchange="toggleOtroActividad()">
                     <option value="">Seleccione...</option>
-                    <option value="AGRICULTURA">Agricultura</option>
-                    <option value="COMERCIO">Comercio</option>
-                    <option value="FINANCIEROS">Servicios Financieros</option>
-                    <option value="OTRO">Otro</option>
+                    <option value="AGRICULTURA, GANADERIA, PESCA, CAZA Y APROVECHAMIENTO FORESTAL">AGRICULTURA, GANADERÍA,PESCA, CAZA Y APROVECHAMIENTO FORESTAL</option>
+                    <option value="COMERCIO">COMERCIO</option>
+                    <option value="SERVICIOS FINANCIEROS">SERVICIOS FINANCIEROS</option>
+                    <option value="SERVICIOS PROFESIONALES">SERVICIOS PROFESIONALES</option>
+                    <option value="CULTURA Y DEPORTE">CULTURA Y DEPORTE</option>
+                    <option value="CONSTRUCCION">CONSTRUCCIÓN</option>
+                    <option value="CORREOS Y ALMACENAMIENTO">CORREOS Y ALMACENAMIENTO</option>
+                    <option value="RESTAURANTES, HOSPEDAJE Y SERVICIOS TURISTICOS">RESTAURANTES, HOSPEDAJE Y SERVICIOS TURÍSTICOS</option>
+                    <option value="SERVICIOS EDUCATIVOS">SERVICIOS EDUCATIVOS</option>
+                    <option value="RECONSTRUCCION">RECONSTRUCCIÓN</option>
+                    <option value="INDUSTRIAS MANUFACTURERAS">INDUSTRIAS MANUFACTURERAS</option>
+                    <option value="INFORMACION EN MEDIOS MASIVOS E INDUSTRIA DEL CINE">INFORMACIÓN EN MEDIOS MASIVOS E INDUSTRIA DEL CINE</option>
+                    <option value="ASOCIACIONES Y ORGANIZACIONES">ASOCIACIONES Y ORGANIZACIONES</option>
+                    <option value="SERVICIO DE SALUD">SERVICIO DE SALUD</option>
+                    <option value="OTRO">OTRO</option>
                 </select>
             </div>
             <div class="col-md-12" id="divOtroActividad" style="display: none;"> <!--[cite: 1] -->
@@ -206,8 +221,8 @@
                 <div id="badge-foto-dom"></div>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Exterior del CT</label> <!--[cite: 1] -->
-                <input class="form-control" type="file" id="foto-ext" name="Foto_Exterior" accept="image/*" capture="environment" required>
+                <label class="form-label">Exterior del CT (Opcional)</label>
+                <input class="form-control" type="file" id="foto-ext" name="Foto_Exterior" accept="image/*" capture="environment">
                 <div id="badge-foto-ext"></div>
             </div>
             <div class="col-md-4">
@@ -258,12 +273,12 @@
         <h4 class="seccion-titulo">7. PLAN DE ACTIVIDADES</h4>
         <div class="row g-3">
             <div class="col-md-12">
-                <label class="form-label">Actividades a desarrollar</label> <!--[cite: 1] -->
-                <textarea class="form-control" name="Actividades" rows="2" required></textarea>
+                <label class="form-label">Actividades a desarrollar (Máx. 500 caracteres)</label>
+                <textarea class="form-control" name="Actividades" rows="2" maxlength="500" required></textarea>
             </div>
             <div class="col-md-12">
-                <label class="form-label">Habilidades a adquirir</label> <!--[cite: 1] -->
-                <textarea class="form-control" name="Habilidades" rows="2" required></textarea>
+                <label class="form-label">Habilidades a adquirir (Máx. 500 caracteres)</label>
+                <textarea class="form-control" name="Habilidades" rows="2" maxlength="500" required></textarea>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Número de jóvenes</label> <!--[cite: 1] -->
@@ -322,8 +337,38 @@
         }
     }
 
-    document.getElementById('formCT').addEventListener('submit', function(e) {
-        e.preventDefault();
+    function toggleOtroCargo() {
+        const select = document.getElementById('selectCargo');
+        const divOtro = document.getElementById('divOtroCargo');
+        const inputOtra = document.getElementById('otroCargo');
+        if (select.value === 'OTRO') {
+            divOtro.style.display = 'block';
+            inputOtra.required = true;
+            inputOtra.name = "Cargo"; 
+            select.name = ""; 
+        } else {
+            divOtro.style.display = 'none';
+            inputOtra.required = false;
+            inputOtra.value = '';
+            inputOtra.name = "";
+            select.name = "Cargo";
+        }
+    }
+
+    function toggleRFC() {
+        const select = document.getElementById('tipoCentro');
+        const inputRFC = document.getElementById('inputRFC');
+        const reqRFC = document.getElementById('reqRFC');
+        if (select.value === 'FISICA') {
+            inputRFC.required = false;
+            reqRFC.textContent = '(Opcional)';
+        } else {
+            inputRFC.required = true;
+            reqRFC.textContent = '*';
+        }
+    }
+
+    document.getElementById('formCT').addEventListener('submit', function(e) {        e.preventDefault();
         
         const checkboxes = document.querySelectorAll('.dias-cap:checked');
         if (checkboxes.length !== 5) {
