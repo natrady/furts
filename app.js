@@ -18,12 +18,29 @@ request.onupgradeneeded = e => {
 request.onsuccess = e => { db = e.target.result; updatePendingCount(); };
 
 // 2. Validaciones Globales de Inputs
+// OJO: reasignar .value en CADA tecla (aunque el texto no cambie) hace que el
+// cursor salte siempre al final del campo. En campos largos (como la CURP)
+// esto "confunde" al navegador: cada letra que escribes en medio del texto
+// se mueve al final, dando la sensación de que no te deja escribir bien.
+// Por eso ahora sólo tocamos .value si el texto realmente cambió, y
+// reposicionamos el cursor donde el usuario iba escribiendo.
 document.addEventListener('input', e => {
   if (e.target.matches('input[type="text"], textarea')) {
-    let val = e.target.value;
+    const original = e.target.value;
+    let val = original;
     val = val.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Quitar acentos
     val = val.replace(/[^a-zA-Z0-9\s]/g, ""); // Quitar especiales
-    e.target.value = val.toUpperCase();
+    val = val.toUpperCase();
+
+    if (val !== original) {
+      const start = e.target.selectionStart;
+      const end = e.target.selectionEnd;
+      const diff = val.length - original.length;
+      e.target.value = val;
+      if (typeof start === 'number' && e.target.setSelectionRange) {
+        e.target.setSelectionRange(Math.max(0, start + diff), Math.max(0, end + diff));
+      }
+    }
   }
 });
 
