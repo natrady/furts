@@ -10,7 +10,10 @@
     <style>
         :root { --stps-dark: #161a1d; --stps-grey: #98989A; --stps-gold: #b38e5d; --stps-darkgold: #8b6530; --stps-guinda: #611232; }
         /* overscroll-behavior-y bloquea que la pantalla se refresque al jalar hacia abajo */
-        body { background-color: #f6f3ee; color: var(--stps-dark); padding-top: 190px; overscroll-behavior-y: none; }
+        body { background-color: #f6f3ee; color: var(--stps-dark); padding-top: 250px; overscroll-behavior-y: none; }
+        
+        /* Pantalla de carga (Overlay) */
+        #loadingOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; }
         
         /* Barra de navegación superior fija */
         .sticky-top-bar { position: fixed; top: 0; left: 0; width: 100%; z-index: 1050; background-color: #f8f9fa; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
@@ -39,7 +42,11 @@
     </style>
 </head>
 <body>
-
+<!-- Overlay de Carga -->
+<div id="loadingOverlay" class="d-none">
+    <div class="spinner-border text-light mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+    <h3 class="fw-bold text-center px-4">⏳ Guardando, no cierres...</h3>
+</div>
 <!-- Barra Superior Fija -->
 <div class="sticky-top-bar">
     <div class="banner-legal">"ESTE PROGRAMA ES PÚBLICO AJENO A CUALQUIER PARTIDO POLÍTICO. QUEDA PROHIBIDO EL USO PARA FINES DISTINTOS A LOS ESTABLECIDOS EN EL PROGRAMA"</div>
@@ -147,12 +154,12 @@
         <h4 class="seccion-titulo">2. CONTACTO</h4>
         <div class="row g-3">
             <div class="col-md-4">
-                <label class="form-label">Teléfono CT (Opcional)</label> <!--[cite: 1] -->
-                <input type="text" class="form-control" name="TelCT">
+                <label class="form-label">Teléfono CT (Opcional)</label>
+                <input type="text" class="form-control" name="TelCT" pattern="\d{10}" title="Debe contener exactamente 10 dígitos numéricos" maxlength="10">
             </div>
             <div class="col-md-4">
-                <label class="form-label">Teléfono Móvil</label> <!--[cite: 1] -->
-                <input type="text" class="form-control" name="TelMovil" required>
+                <label class="form-label">Teléfono Móvil</label>
+                <input type="text" class="form-control" name="TelMovil" pattern="\d{10}" title="Debe contener exactamente 10 dígitos numéricos" maxlength="10" required>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Correo Electrónico</label> <!--[cite: 1] -->
